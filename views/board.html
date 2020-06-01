@@ -32,7 +32,9 @@
             crossorigin="anonymous"></script>
     <script>
       $(function() {
-        var currentBoard = window.location.pathname.slice(3,-1);
+        // var currentBoard = window.location.pathname.slice(3,-1);
+        var currentBoard = window.location.pathname.slice(3).split('/')[0]; // remove the last '/'
+        
         var url = "/api/threads/"+currentBoard;
         $('#boardTitle').text('Welcome to '+window.location.pathname)
         $.ajax({
@@ -45,7 +47,6 @@
             // THIS ARRAY SET UP IS FOR CODE READABILITIES AND TESTING!
             // THIS IS NOT WHAT IT WOULD LOOK LIKE TO GO LIVE
             //
-            console.log(data);
             data.forEach(function(ele) {
               console.log(ele);//can I use typeScript please?!
               var thread = ['<div class="thread">'];
