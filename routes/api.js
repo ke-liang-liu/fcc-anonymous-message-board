@@ -18,8 +18,8 @@ module.exports = function (app) {
   app.route('/api/threads/:board')
     .get(function(req, res) {
       MongoClient.connect(DB_CONNECTION_STR, function(err, client) {
-        const db = client.db('test2');
-        db.collection('fcc-anonymous-message-board').find({ /*board: req.params.board*/ }, {
+        const db = client.db('fcc-anonymous-message-board');
+        db.collection(req.params.board).find({}, {
           delete_password: 0, 
           reported: 0
         }).limit(10).sort({'bumped_on': -1}).toArray(function(err, docs) {
@@ -35,22 +35,22 @@ module.exports = function (app) {
   
     .post(function(req, res) {
       let newThread = {
-        board: req.params.board,
         text: req.body.text,
         delete_password: req.body.delete_password,
         created_on: new Date(),
         bumped_on: new Date(),
         reported: false,
-        replies: []
+        replies: [],
+        replycount: 0
       }    
       MongoClient.connect(DB_CONNECTION_STR, function(err, client) {
         if (err) { console.err(err) }
-        const db = client.db('test2');
-        db.collection('fcc-anonymous-message-board').insertOne(newThread, function(err, result) {
+        const db = client.db('fcc-anonymous-message-board');
+        db.collection(req.params.board).insertOne(newThread, function(err, result) {
           if (err) { console.err(err) }
           db.close();          
-          res.json(result.ops[0]);
-          // res.redirect('/b/' + req.params.board + '/');   //(Recommend res.redirect to board page /b/{board})
+          // res.json(result.ops[0]);
+          res.redirect('/b/' + req.params.board + '/');   //(Recommend res.redirect to board page /b/{board})
         })
       })
   }) // end of .post
@@ -60,9 +60,9 @@ module.exports = function (app) {
       
       MongoClient.connect(DB_CONNECTION_STR, function(err, client) {
         if (err) { console.error(err)}
-        const db = client.db('test2');
+        const db = client.db('fcc-anonymous-message-board');
         const filter = { _id: _id};
-        db.collection('fcc-anonymous-message-board').findOne(filter, function(err, doc) {
+        db.collection(req.params.board).findOne(filter, function(err, doc) {
           if (err) {console.error(err)}
           console.log(req.body.delete_password);
           console.log(doc.delete_password);
@@ -70,7 +70,7 @@ module.exports = function (app) {
             res.json('incorrect password')
             db.close();
           } else {
-            db.collection('fcc-anonymous-message-board').deleteOne(filter, function(err, result) {
+            db.collection(req.params.board).deleteOne(filter, function(err, result) {
               if (err) {console.error(err)}
               if (result.deletedCount === 0) {
                 res.json('could not delete')
@@ -90,8 +90,8 @@ module.exports = function (app) {
     const _id = ObjectId(req.body.thread_id);
     MongoClient.connect(DB_CONNECTION_STR, function(err, client) {
       if (err) { console.error(err) }
-      const db = client.db('test2');
-      db.collection('fcc-anonymous-message-board').updateOne({_id: _id}, 
+      const db = client.db('fcc-anonymous-message-board');
+      db.collection(req.params.board).updateOne({_id: _id}, 
         {
           $set: {'reported': true}  
         
@@ -113,8 +113,8 @@ module.exports = function (app) {
         let _id = ObjectId(req.query.thread_id);
         MongoClient.connect(DB_CONNECTION_STR, function(err, client) {
           if (err) { console.error(err) }
-          const db = client.db('test2');
-          db.collection('fcc-anonymous-message-board').findOne({_id: _id}, {
+          const db = client.db('fcc-anonymous-message-board');
+          db.collection(req.params.board).findOne({_id: _id}, {
               delete_password: 0,
               reported: 0
             }, function(err, doc) {
@@ -139,17 +139,17 @@ module.exports = function (app) {
       }
       MongoClient.connect(DB_CONNECTION_STR, function(err, client) {
         if (err) { console.error(err) }
-        const db = client.db('test2');
-        db.collection('fcc-anonymous-message-board').update({_id: ObjectId(req.body.thread_id)}, 
+        const db = client.db('fcc-anonymous-message-board');
+        db.collection(req.params.board).update({_id: ObjectId(req.body.thread_id)}, 
           {
             $push: {'replies': newReply},
-            $set: {'bumped_on': new Date()}
+            $set: {'bumped_on': new Date()},
+            $inc: {'replycount': 1}
           }, function(err, result) {
                 if(err){console.error(err)} 
-                // res.redirect('/b/' + req.body.board + '/' + req.body.thread_id)
-                res.json(result);
+                // res.json(result);
+                res.redirect('/b/' + req.params.board + '/' + req.body.thread_id);
           })
-        
       })
   })
     .put(function(req, res) {
@@ -163,8 +163,8 @@ module.exports = function (app) {
       }
       MongoClient.connect(DB_CONNECTION_STR, function(err, client) {
         if (err) {console.error(err)}
-        const db = client.db('test2');
-        db.collection('fcc-anonymous-message-board').updateOne(filter, {
+        const db = client.db('fcc-anonymous-message-board');
+        db.collection(req.params.board).updateOne(filter, {
           $set: { 'replies.$.reported': true}
         }, function(err, result){
           if (err) 
@@ -189,12 +189,12 @@ module.exports = function (app) {
         "replies._id": replyId
       }
       MongoClient.connect(DB_CONNECTION_STR, function(err, client) {
-        const db = client.db('test2');
-        db.collection('fcc-anonymous-message-board').findOne(filter, {'_id': 1, 'replies.$': 1} ,function(err, doc) {
+        const db = client.db('fcc-anonymous-message-board');
+        db.collection(req.params.board).findOne(filter, {'_id': 1, 'replies.$': 1} ,function(err, doc) {
           if (err) {console.error(err)}
           if (req.body.delete_password === doc.replies[0].delete_password) {
             console.log('one')
-            db.collection('fcc-anonymous-message-board').updateOne(filter, {
+            db.collection(req.params.board).updateOne(filter, {
               $set: { 'replies.$.text': 'deleted'}
             }, function(err, doc){
               if (err) {
