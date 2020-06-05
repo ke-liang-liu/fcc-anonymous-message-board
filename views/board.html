@@ -15,11 +15,11 @@
     </header>
     
     <div id='submitNewThread'>
-      <h3>Submit a new thread:</h3>
+      <h3>Submit a new thread (topic):</h3>
       <form id="newThread" method="post" action="/api/">
-        <textarea rows="8" cols="120" type='text' placeholder='Thread text...' name='text' required=''></textarea><br>
+        <textarea rows="5" cols="80" type='text' placeholder='new thread text...' name='text' required=''></textarea><br>
         <input type='text' placeholder='password to delete' name='delete_password' required=''><br>
-        <input type="submit" value="Submit thread">
+        <input type="submit" value="Create thread">
       </form>
     </div>
     
@@ -38,7 +38,7 @@
         var currentBoard = window.location.pathname.slice(3).split('/')[0]; // remove the last '/'
         
         var url = "/api/threads/"+currentBoard;
-        $('#boardTitle').text('Welcome to '+window.location.pathname)
+        $('#boardTitle').text('Welcome to ' + currentBoard)
         $.ajax({
           type: "GET",
           url: url,
@@ -61,9 +61,9 @@
           $(this).attr('action', "/api/threads/" + currentBoard);
         });
         
-// ***************************************************************
+/***************************************************************
      //move "submit reportThread logic" to tools.js
-// *******************keliang******************************************************        
+**************************************************************/
         $('#boardDisplay').on('submit','#reportReply', function(e) {
           var url = "/api/replies/"+currentBoard;
           $.ajax({
@@ -83,17 +83,9 @@
             success: function(data) { alert(data) }
           });
           e.preventDefault();
-        });        
-        $('#boardDisplay').on('submit','#deleteReply', function(e) {
-          var url = "/api/replies/"+currentBoard;
-          $.ajax({
-            type: "DELETE",
-            url: url,
-            data: $(this).serialize(),
-            success: function(data) { alert(data) }
-          });
-          e.preventDefault();
-        });              
+        });
+        
+       // ****** move deleteReply logic to tools.js            
       });
    </script>
   </body>

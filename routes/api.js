@@ -193,7 +193,7 @@ module.exports = function (app) {
           if (req.body.delete_password === doc.replies[0].delete_password) {
             console.log('one')
             db.collection(req.params.board).updateOne(filter, {
-              $set: { 'replies.$.text': 'deleted'}
+              $set: { 'replies.$.text': 'DELETED'}
             }, function(err, doc){
               if (err) {
                 console.error(err);

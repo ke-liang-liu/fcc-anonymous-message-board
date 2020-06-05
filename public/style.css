@@ -12,7 +12,7 @@ body {
 }
 
 .reply {
-  border: 1px dotted black;
+  border: 1px dashed black;
   margin: 5px;
   padding: 5px;
 }

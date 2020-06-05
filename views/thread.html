@@ -30,7 +30,7 @@
         let currentBoard = currentURL[0];
         let thread_id = currentURL[1];
         var url = "/api/replies/" + currentBoard;
-        $('#threadTitle').text(window.location.pathname);
+        $('#threadTitle').html(`/b/<a href="/b/${currentBoard}">${currentBoard}<a>/${thread_id}`);
         $.ajax({
           type: "GET",
           url: url,
