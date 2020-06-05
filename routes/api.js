@@ -88,18 +88,19 @@ module.exports = function (app) {
   
   .put(function(req, res) {
     const _id = ObjectId(req.body.thread_id);
+    let setTo = req.body.report_value==='true' ? false : true;
     MongoClient.connect(DB_CONNECTION_STR, function(err, client) {
       if (err) { console.error(err) }
       const db = client.db('fcc-anonymous-message-board');
       db.collection(req.params.board).updateOne({_id: _id}, 
         {
-          $set: {reported: true} 
+          $set: {reported: setTo} 
         }, function(err, doc) {
           if (err) {
             console.error(err)
             db.close();
           } else {
-            res.json('success');
+            res.json({status: 'success', setTo: setTo});
             db.close();
           }
         })
@@ -117,7 +118,6 @@ module.exports = function (app) {
               reported: 0
             }, function(err, doc) {
             if(err) {console.error(err)}
-            console.log(doc);
             res.json(doc);
             db.close();
           })
