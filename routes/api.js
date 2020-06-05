@@ -21,7 +21,7 @@ module.exports = function (app) {
         const db = client.db('fcc-anonymous-message-board');
         db.collection(req.params.board).find({}, {
           delete_password: 0, 
-          reported: 0
+          // reported: 0
         }).limit(10).sort({'bumped_on': -1}).toArray(function(err, docs) {
           if (err) { console.error(err)}
           docs.forEach(ele => {
@@ -93,8 +93,7 @@ module.exports = function (app) {
       const db = client.db('fcc-anonymous-message-board');
       db.collection(req.params.board).updateOne({_id: _id}, 
         {
-          $set: {'reported': true}  
-        
+          $set: {reported: true} 
         }, function(err, doc) {
           if (err) {
             console.error(err)
@@ -105,7 +104,6 @@ module.exports = function (app) {
           }
         })
     })
-    
   })
   
   app.route('/api/replies/:board')

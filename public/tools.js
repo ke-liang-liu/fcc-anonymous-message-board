@@ -36,3 +36,7 @@ var formatDate = function (dateStr) {
   const sec = addFirstZero(d.getSeconds());
   return `${dayName}, ${date} ${monthName} ${year}, ${hours}:${min}:${sec}`;
 }
+
+var threadHtml() {
+  
+}
