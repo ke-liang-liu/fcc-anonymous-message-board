@@ -21,7 +21,7 @@ suite('Functional Tests', function() {
   suite('API ROUTING FOR /api/threads/:board', function() {
     
     suite('POST', function() {
-      test('post a thread', function(done) {
+      test.only('post a thread', function(done) {
         this.timeout(3000);
         chai.request(server)
           .post('/api/threads/testboard')
@@ -185,7 +185,7 @@ suite('Functional Tests', function() {
     suite('DELETE', function() {
       // delete a post(just changing the text to '[deleted]' instead of removing completely like a thread) 
       // if I send a DELETE request to /api/replies/{board} and pass along the threadid_, replyid_, & deletepassword_. (Text response will be 'incorrect password' or 'success')
-      test.only('Delete a post', function(done) {
+      test('Delete a post', function(done) {
         this.timeout(3000);
         chai.request(server)
           .delete('/api/replies/testboard')
