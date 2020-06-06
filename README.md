@@ -1,11 +1,7 @@
-**FreeCodeCamp**- Information Security and Quality Assurance
-------
+## Information Security and Quality Assurance Projects - Anonymous Message Board
 
-Project Anon Message Board
+**[DEMO website](https://fcc-anonymous-message-board-liu.glitch.me/)**
 
-1) SET NODE_ENV to `test` without quotes when ready to write tests and DB to your databases connection string (in .env)
-2) Recomended to create controllers/handlers and handle routing in routes/api.js
-3) You will add any security features to `server.js`
-4) You will create all of the functional/unit tests in `tests/2_functional-tests.js` and `tests/1_unit-tests.js` but only functional will be tested
+![Screenshot 2020-06-07 at 12 26 37 AM](https://user-images.githubusercontent.com/55439246/83946665-9e50bf80-a855-11ea-9ab0-390717dbcf48.png)
 
-
+![ThreadScreen](https://user-images.githubusercontent.com/55439246/83946743-099a9180-a856-11ea-8b58-f83245c734f6.png)
