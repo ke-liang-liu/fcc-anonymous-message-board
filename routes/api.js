@@ -75,7 +75,7 @@ module.exports = function (app) {
               if (result.deletedCount === 0) {
                 res.json('could not delete')
               } else {
-                res.json('success')
+                res.json('success');
               }
             })
             db.close();

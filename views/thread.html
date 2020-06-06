@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Welcome to HyperDev!</title>
+    <title>Anonymous Message Board</title>
     <meta name="description" content="A cool thing made with HyperDev">
     <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,12 +26,16 @@
     <script src="/public/tools.js"></script>
     <script>
       $(function() {
+        console.log('inside thread.html:')
+        console.log(window.location);
+        console.log(location);
+        console.log(location.pathname);
         var currentURL = window.location.pathname.slice(3);
         currentURL = currentURL.split('/');
         let currentBoard = currentURL[0];
         let thread_id = currentURL[1];
         var url = "/api/replies/" + currentBoard;
-        $('#threadTitle').html(`/b/<a href="/b/${currentBoard}">${currentBoard}<a>/${thread_id}`);
+        $('#threadTitle').html(`<a href="/"><i class="fa fa-home"></i></a>&nbsp;/b/<a href="/b/${currentBoard}">${currentBoard}<a>/${thread_id}`);
         $.ajax({
           type: "GET",
           url: url,
@@ -78,7 +83,10 @@
             type: "DELETE",
             url: url,
             data: $(this).serialize(),
-            success: function(data) { alert(data) }
+            success: function(data) {
+              // alert(data);
+              window.location.replace("/b/" + currentBoard);
+            }
           });
           e.preventDefault();
         });        

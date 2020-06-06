@@ -37,6 +37,7 @@ var formatDate = function (dateStr) {
   return `${dayName}, ${date} ${monthName} ${year}, ${hours}:${min}:${sec}`;
 }
 
+/* generate HTML for one thread*/
 var oneThreadHtml = function(ele, currentBoard, i) {
   // console.log(ele);//can I use typeScript please?!
   let pathname = window.location.pathname;
@@ -49,9 +50,9 @@ var oneThreadHtml = function(ele, currentBoard, i) {
   thread.push(`<button id="reportThreadBtn${i}" title=${ele.reported? "Starred" : "Unstarred"} style="width:35px;height:22px">${ele.reported? "&#11088;" : "&#9734;"}</button>`);
   thread.push('</form>');
 
-  thread.push('&nbsp;<p class="id" style="display:inline">Thread id: '+ele._id+' ('+   formatDate(ele.created_on)  +')</p>&nbsp;');
+  thread.push('&nbsp;<p class="id" style="display:inline"><b>Thread id</b>: '+ele._id+' ('+   formatDate(ele.created_on)  +')</p>&nbsp;');
 
-  thread.push('<form id="deleteThread" style="display:inline"><input type="hidden" value="'+ele._id+'" name="thread_id" required=""><input type="text" placeholder="password" size="8" name="delete_password" required=""><input type="submit" value="Delete thread"></form>');
+  thread.push('<form id="deleteThread" style="display:inline"><input type="hidden" value="'+ele._id+'" name="thread_id" required=""><input type="text" placeholder="password" size="8" name="delete_password" required="">&nbsp;<input type="submit" value="Delete thread"></form>');
   thread.push('<h3>'+ele.text+'</h3>');
   thread.push('</div><div class="replies">');
   var hiddenCount = ele.replycount - 3;
@@ -65,7 +66,7 @@ var oneThreadHtml = function(ele, currentBoard, i) {
   ele.replies.forEach(function(rep, j) {
     thread.push('<div class="reply">')
     thread.push('<form id="reportReply" style="display:inline"><input type="hidden" name="thread_id" value="'+ele._id+'"><input type="hidden" name="reply_id" value="'+rep._id+'"><input type="submit" value="Report"></form>');
-    thread.push('&nbsp;<p class="id" style="display:inline">Reply id: '+rep._id+' ('+ formatDate(rep.created_on) +')</p>&nbsp;');
+    thread.push('&nbsp;<p class="id" style="display:inline"><b>Reply id</b>: '+rep._id+' ('+ formatDate(rep.created_on) +')</p>&nbsp;');
     thread.push(`<form id="deleteReply${j}" style="display:inline"><input type="hidden" value="${ele._id}" name="thread_id" required=""><input type="hidden" value="${rep._id}" name="reply_id" required=""><input type="text" placeholder="password" size="8" name="delete_password" required=""><input type="submit" value="Delete reply"></form>`);
     thread.push(`<p id="replyText${j}">${rep.text}</p>`);
     thread.push('</div>')

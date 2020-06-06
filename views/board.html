@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Welcome to HyperDev!</title>
+    <title>Anonymous Message Board</title>
     <meta name="description" content="A cool thing made with HyperDev">
     <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,10 +16,10 @@
     </header>
     
     <div id='submitNewThread'>
-      <h3>Submit a new thread (topic):</h3>
+      <h3>Submit a new thread(topic):</h3>
       <form id="newThread" method="post" action="/api/">
-        <textarea rows="5" cols="80" type='text' placeholder='new thread text...' name='text' required=''></textarea><br>
-        <input type='text' placeholder='password to delete' name='delete_password' required=''><br>
+        <textarea rows="5" cols="80" type='text' placeholder='new thread(topic) text...' name='text' required=''></textarea><br>
+        <input type='text' placeholder='password to delete' name='delete_password' required=''>
         <input type="submit" value="Create thread">
       </form>
     </div>
@@ -38,7 +39,7 @@
         var currentBoard = window.location.pathname.slice(3).split('/')[0]; // remove the last '/'
         
         var url = "/api/threads/"+currentBoard;
-        $('#boardTitle').text('Welcome to ' + currentBoard)
+        $('#boardTitle').html('<a href="/"><i class="fa fa-home"></i></a>&nbsp;Welcome to ' + currentBoard)
         $.ajax({
           type: "GET",
           url: url,
@@ -80,7 +81,10 @@
             type: "DELETE",
             url: url,
             data: $(this).serialize(),
-            success: function(data) { alert(data) }
+            success: function(data) { 
+              // alert(data);
+              window.location.reload();
+            }
           });
           e.preventDefault();
         });
