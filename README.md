@@ -1,4 +1,4 @@
-## Information Security and Quality Assurance Projects - Anonymous Message Board
+**FreeCodeCamp - Information Security and Quality Assurance Projects - Anonymous Message Board**
 
 **[DEMO website](https://fcc-anonymous-message-board-liu.glitch.me/)**
 
