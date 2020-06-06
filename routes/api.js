@@ -115,7 +115,7 @@ module.exports = function (app) {
           const db = client.db('fcc-anonymous-message-board');
           db.collection(req.params.board).findOne({_id: _id}, {
               delete_password: 0,
-              reported: 0
+              // reported: 0
             }, function(err, doc) {
             if(err) {console.error(err)}
             res.json(doc);
@@ -153,6 +153,9 @@ module.exports = function (app) {
     .put(function(req, res) {
       // report a reply and change its reported value to true by sending a PUT request to /api/replies/{board} and 
       // pass along the threadid_ & replyid_. (Text response will be 'success')
+    console.log(req.body)
+      let setTo = (req.body.reply_report_value === 'true') ? false : true;
+      
       let threadId = ObjectId(req.body.thread_id);
       let replyId = ObjectId(req.body.reply_id);
       let filter = {
@@ -163,14 +166,14 @@ module.exports = function (app) {
         if (err) {console.error(err)}
         const db = client.db('fcc-anonymous-message-board');
         db.collection(req.params.board).updateOne(filter, {
-          $set: { 'replies.$.reported': true}
+          $set: { 'replies.$.reported': setTo}
         }, function(err, result){
           if (err) 
           { 
             console.error(err)
             db.close();
           } else {
-            res.json('success');
+            res.json({status: 'success', setTo: setTo});
             db.close();
           }
         }) 

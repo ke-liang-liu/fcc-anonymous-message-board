@@ -64,18 +64,8 @@
         });
         
 /***************************************************************
-     //move "submit reportThread logic" to tools.js
+     //move "submit reportThread logic" and reportReply logic to tools.js
 **************************************************************/
-        $('#boardDisplay').on('submit','#reportReply', function(e) {
-          var url = "/api/replies/"+currentBoard;
-          $.ajax({
-            type: "PUT",
-            url: url,
-            data: $(this).serialize(),
-            success: function(data) { alert(data) }
-          });
-          e.preventDefault();
-        });
         $('#boardDisplay').on('submit','#deleteThread', function(e) {
           var url = "/api/threads/"+currentBoard;
           $.ajax({

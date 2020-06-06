@@ -26,16 +26,12 @@
     <script src="/public/tools.js"></script>
     <script>
       $(function() {
-        console.log('inside thread.html:')
-        console.log(window.location);
-        console.log(location);
-        console.log(location.pathname);
         var currentURL = window.location.pathname.slice(3);
         currentURL = currentURL.split('/');
         let currentBoard = currentURL[0];
         let thread_id = currentURL[1];
         var url = "/api/replies/" + currentBoard;
-        $('#threadTitle').html(`<a href="/"><i class="fa fa-home"></i></a>&nbsp;/b/<a href="/b/${currentBoard}">${currentBoard}<a>/${thread_id}`);
+        $('#threadTitle').html(`<a href="/"><i class="fa fa-home"></i></a>&nbsp;/<a href="/b/${currentBoard}">${currentBoard}<a>/${thread_id}`);
         $.ajax({
           type: "GET",
           url: url,

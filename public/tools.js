@@ -49,15 +49,12 @@ var oneThreadHtml = function(ele, currentBoard, i) {
   thread.push(`<input type="hidden" id="report_value${i}" name="report_value" value="${ele.reported}">`);
   thread.push(`<button id="reportThreadBtn${i}" title=${ele.reported? "Starred" : "Unstarred"} style="width:35px;height:22px">${ele.reported? "&#11088;" : "&#9734;"}</button>`);
   thread.push('</form>');
-
   thread.push('&nbsp;<p class="id" style="display:inline"><b>Thread id</b>: '+ele._id+' ('+   formatDate(ele.created_on)  +')</p>&nbsp;');
-
   thread.push('<form id="deleteThread" style="display:inline"><input type="hidden" value="'+ele._id+'" name="thread_id" required=""><input type="text" placeholder="password" size="8" name="delete_password" required="">&nbsp;<input type="submit" value="Delete thread"></form>');
   thread.push('<h3>'+ele.text+'</h3>');
   thread.push('</div><div class="replies">');
   var hiddenCount = ele.replycount - 3;
   if (hiddenCount < 1) { hiddenCount = 0 };
-  
   thread.push('<h5>'+ele.replycount+' replies total');
   if (i !== undefined) {
     thread.push(`(${hiddenCount} hidden) - <a href="${pathname}${ele._id}">See the full thread here</a>`);
@@ -65,11 +62,37 @@ var oneThreadHtml = function(ele, currentBoard, i) {
   thread.push(`</h5>`);
   ele.replies.forEach(function(rep, j) {
     thread.push('<div class="reply">')
-    thread.push('<form id="reportReply" style="display:inline"><input type="hidden" name="thread_id" value="'+ele._id+'"><input type="hidden" name="reply_id" value="'+rep._id+'"><input type="submit" value="Report"></form>');
+    thread.push(`<form id="reportReply${j}" style="display:inline">`);
+    thread.push(`<input type="hidden" name="thread_id" value="${ele._id}">`);
+    thread.push(`<input type="hidden" name="reply_id" value="${rep._id}">`)
+    thread.push(`<input type="hidden" id="reply_report_value${j}" name="reply_report_value" value="${rep.reported}">`);
+    thread.push(`<button id="reportReplyBtn${j}" title=${rep.reported? "Starred" : "Unstarred"} style="width:35px;height:22px">${rep.reported? "&#11088;" : "&#9734;"}</button>`);
+    thread.push(`</form>`);
     thread.push('&nbsp;<p class="id" style="display:inline"><b>Reply id</b>: '+rep._id+' ('+ formatDate(rep.created_on) +')</p>&nbsp;');
     thread.push(`<form id="deleteReply${j}" style="display:inline"><input type="hidden" value="${ele._id}" name="thread_id" required=""><input type="hidden" value="${rep._id}" name="reply_id" required=""><input type="text" placeholder="password" size="8" name="delete_password" required=""><input type="submit" value="Delete reply"></form>`);
     thread.push(`<p id="replyText${j}">${rep.text}</p>`);
     thread.push('</div>')
+       $('#boardDisplay').on('submit',`#reportReply${j}`, function(e) {
+          var url = "/api/replies/"+currentBoard;
+          $.ajax({
+            type: "PUT",
+            url: url,
+            data: $(this).serialize(),
+            success: function(data) {
+              // alert(data)
+              if (data.setTo === true) {
+                $(`#reportReplyBtn${j}`).html("&#11088;"); // yellow star
+                $(`#reportReplyBtn${j}`).attr('title', 'Starred');
+                $(`#reply_report_value${j}`).val(true);
+              } else {
+                $(`#reportReplyBtn${j}`).html("&#9734;"); // white star
+                $(`#reportReplyBtn${j}`).attr('title', 'Unstarred');
+                $(`#reply_report_value${j}`).val(false);
+              }
+            }
+          });
+          e.preventDefault();
+        });
        $('#boardDisplay').on('submit',`#deleteReply${j}`, function(e) {
           var url = "/api/replies/"+currentBoard;
           $.ajax({
