@@ -34,7 +34,6 @@
     <script src="/public/tools.js"></script>
     <script>
       $(function() {
-        var dataLength; // number of threads;
         // var currentBoard = window.location.pathname.slice(3,-1);
         var currentBoard = window.location.pathname.slice(3).split('/')[0]; // remove the last '/'
         
@@ -45,7 +44,6 @@
           url: url,
           success: function(data)
           {
-            dataLength = data.length;
             var boardThreads= [];
             //
             // THIS ARRAY SET UP IS FOR CODE READABILITIES AND TESTING!
@@ -54,6 +52,9 @@
             data.forEach(function(ele, i) {
               boardThreads.push(oneThreadHtml(ele, currentBoard, i));
             });
+            if (data.length) {
+              $('#boardTitle').append(` (${data.length} threads)`);              
+            }
             $('#boardDisplay').html(boardThreads.join(''));
           }
         });
