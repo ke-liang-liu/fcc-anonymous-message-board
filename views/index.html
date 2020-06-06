@@ -4,6 +4,7 @@
     <title>Anonymous Message Board</title>
     <meta name="description" content="A cool thing made with HyperDev">
     <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,9 +13,15 @@
   <body>
     <header>
       <h1>
-        ISQA_3 - Anon Message Board
+        ISQA_3 - Anonymous Message Board
       </h1>
     </header>
+    <div style='margin-left: 5%; margin-top: 5%'>
+      <h3>Please enter a board name</h3>
+      <form id="boardnameForm" method="get" class="border">
+        <input id="boardname" type="text" placeholder="Board-name" size="16" style="height:23px; margin-right:10px" ><button type="submit">Submit</button>
+      </form><br>
+    </div>
     <div id='userstories' style='margin-left: 5%; margin-top: 5%'>
       <h3>User Stories</h3>
       <ol>
@@ -38,6 +45,7 @@
       <h2><a href='/b/general/'>Go to testing <i>'/b/general/'</i> board</a></h2>
     </div>
     <hr style='margin: 50px'>
+<!--
     <div id='testui' style='margin-left: 5%'>
       <h2 style="text-align: left">API Tests:</h2>
         <h4>New thread (POST /api/threads/:board)</h4>
@@ -92,12 +100,18 @@
         </form>        
     </div>
     <hr style='margin: 50px; margin-top: 200px'>
+-->
     <!-- Your web-app is https, so your scripts need to be too -->
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
             crossorigin="anonymous"></script>
     <script>
       $(function() {
+        $('#boardnameForm').submit(function(e) {
+            let boardname = $('#boardname').val();
+            boardname = boardname.trim().replace(/\s+/g, "-"); //replace space with -
+            $(this).attr('action', '/b/' + boardname);
+        })
         $('#newThread').submit(function(){
           var board = $('#board1').val();
           $(this).attr('action', "/api/threads/" + board);

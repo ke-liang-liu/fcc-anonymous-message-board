@@ -153,9 +153,7 @@ module.exports = function (app) {
     .put(function(req, res) {
       // report a reply and change its reported value to true by sending a PUT request to /api/replies/{board} and 
       // pass along the threadid_ & replyid_. (Text response will be 'success')
-    console.log(req.body)
-      let setTo = (req.body.reply_report_value === 'true') ? false : true;
-      
+      let setTo = (req.body.reply_report_value === 'true') ? false : true;      
       let threadId = ObjectId(req.body.thread_id);
       let replyId = ObjectId(req.body.reply_id);
       let filter = {
