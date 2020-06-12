@@ -78,7 +78,11 @@ var oneThreadHtml = function(ele, currentBoard, i) {
             type: "PUT",
             url: url,
             data: $(this).serialize(),
+            beforeSend: function() {
+              $("#overlay").fadeIn();
+            },
             success: function(data) {
+              $("#overlay").fadeOut();
               // alert(data)
               if (data.setTo === true) {
                 $(`#reportReplyBtn${j}`).html("&#11088;"); // yellow star
@@ -99,9 +103,12 @@ var oneThreadHtml = function(ele, currentBoard, i) {
             type: "DELETE",
             url: url,
             data: $(this).serialize(),
+            beforeSend: function() {
+              $("#overlay").fadeIn();
+            },
             success: function(data) {
-              // alert(data) 
-              $(`#replyText${j}`).text('DELETED');
+              $("#overlay").fadeOut();
+              $(`#replyText${j}`).text('(DELETED)');
             }
           });
           e.preventDefault();
@@ -119,8 +126,10 @@ var oneThreadHtml = function(ele, currentBoard, i) {
             type: "PUT",
             url: url,
             data: $(this).serialize(),
+            beforeSend: function() {
+              $("#overlay").fadeIn();
+            },
             success: function(data) {
-              // alert(data) 
               if (data.setTo === true) {
                 $(`#reportThreadBtn${i}`).html("&#11088;"); // yellow star
                 $(`#reportThreadBtn${i}`).attr('title', 'Starred');
@@ -131,6 +140,9 @@ var oneThreadHtml = function(ele, currentBoard, i) {
                 $(`#report_value${i}`).val(false);
               }
             }
+          }).done(function() {
+            console.log('ajax done!!!');
+            $("#overlay").fadeOut();
           });
           e.preventDefault();
         });
